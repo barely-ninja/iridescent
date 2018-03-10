@@ -7,7 +7,7 @@ class Table extends React.Component {
   }
 
   componentDidMount(){
-    fetch(this.props.src)
+    fetch(this.props.src, {mode: 'cors'})
       .then(response => response.text())
       .then(data => {
         const textRows = data.split('\r')
