@@ -3,7 +3,7 @@ import React from 'react'
 const EditTable = (props) => {
   return (
     <div
-      className="table-source-input">
+      className="edited-table leaf">
       <input 
         type="text" 
         onChange={(ev) => props.onChangeState(props.position, {src: ev.target.value})}

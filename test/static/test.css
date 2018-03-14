@@ -1,0 +1,55 @@
+.hidden {
+  display: none;
+}
+
+.content {
+  width: 100%;
+  height: 100%;
+  font-family: monospace;
+}
+
+.branch, .leaf {
+  width: 97%;
+  border: 1px solid gray;
+  border-radius: 10px;
+}
+
+.branch {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+}
+
+.toolbar {
+  position: relative;
+  width: 100%;
+  height: 60px;
+}
+
+.toggle {
+  text-align: center;
+  vertical-align: middle;
+  line-height: 50px;
+  width: 150px;
+  height: 50px;
+  position: absolute;
+  border-radius: 5px;
+}
+
+.extra-toggle {
+  background-color: gray;
+  left: 10px;
+  top: 10px;
+}
+
+.add-toggle {
+  background-color: lightgreen;
+  left: 10px;
+  bottom: 10px;
+}
+
+.leaf {
+  min-height: 50px;
+  position: relative;
+}
+

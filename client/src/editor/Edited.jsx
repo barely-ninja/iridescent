@@ -1,10 +1,10 @@
 import React from 'react'
 
 const wrapEdited = (target, id, commonProps) => {
-  console.log(target, id, commonProps)
+  //console.log(target, id, commonProps)
   return (props) => (
     <div
-      className="editor-component-wrapper" key={id.join('-')}>
+      className="edited branch" key={id.join('-')}>
       {('children' in target && Array.isArray(target.children)) ? 
         target.children.map((item, cid) => {
           const childId = id.slice()
@@ -13,20 +13,24 @@ const wrapEdited = (target, id, commonProps) => {
         }) : 
         React.createElement(target.component, {...props, position: id})}
       <div
-        className="add-component-button">
-        Add
-      </div>
-      <div
-        className="component-list">
-        <ul>
-          {commonProps.components.map((item, ind) => (
-            <li 
-              key={ind} 
-              onClick={()=>commonProps.onAddComponent(id, ind)}>
-              {item.name}
-            </li>
-          ))}
-        </ul>
+        className="toolbar">
+        <div
+          className="add-toggle toggle">
+          Add:
+          <div
+            className="add-components">
+            <select name="components">
+              {commonProps.components.map((item, ind) => (
+                <option 
+                  key={ind}
+                  value={ind} 
+                  onSelect={()=>commonProps.onAddComponent(id, ind)}>
+                  {item.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
       </div>    
     </div> 
   )

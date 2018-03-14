@@ -3,7 +3,7 @@ import wrapEdited from './Edited.jsx'
 import EditTable from 'src/table/EditTable.jsx'
 import tableProps from 'src/table'
 
-const Blank = ()=> <div className="blank-container"></div>
+const Blank = ()=> <div className="blank leaf"></div>
 const blankProps = {
   toString: ()=>''
 }
@@ -73,7 +73,7 @@ class Editor extends React.Component {
 
   render(){
     return (<div
-      className="editor-container">
+      className="editor branch">
       {this.state.componentTree.map((item, id) =>
         wrapEdited(item, [id], {
           onAddComponent: (position, selectedIndex) => this.changeState({

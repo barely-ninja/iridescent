@@ -9,9 +9,19 @@ class Extra extends React.Component {
   render(){
     return (
       <div 
-        className="extra-container"
-        onClick={() => this.setState({isShown:!this.state.isShown})}>
-        {this.state.isShown?this.props.children:this.props.text}
+        className="extra branch">
+        <div
+          className="toolbar">
+          <div 
+            className="extra-toggle toggle"
+            onClick={() => this.setState({isShown:!this.state.isShown})}>
+            {this.state.isShown?'Hide':this.props.text}
+          </div>
+        </div>
+        <div 
+          className={this.state.isShown?'extra-contents branch':'hidden'}>
+          {this.props.children}
+        </div>
       </div>
     )
   }
