@@ -9,8 +9,10 @@
 }
 
 .branch, .leaf {
-  width: 97%;
-  border: 1px solid gray;
+  padding-top: 5px;
+  pabbing-bottom: 5px;
+  width: 98%;
+  border: 1px solid lightgray;
   border-radius: 10px;
 }
 

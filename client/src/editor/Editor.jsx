@@ -2,6 +2,8 @@ import React from 'react'
 import wrapEdited from './Edited.jsx'
 import EditTable from 'src/table/EditTable.jsx'
 import tableProps from 'src/table'
+import EditText from 'src/text/EditText.jsx'
+import textProps from 'src/text'
 
 const Blank = ()=> <div className="blank leaf"></div>
 const blankProps = {
@@ -9,6 +11,10 @@ const blankProps = {
 }
 
 const availableComponents = [
+  {
+    component: EditText,
+    ...textProps
+  },
   {
     component: EditTable,
     ...tableProps
@@ -52,22 +58,27 @@ class Editor extends React.Component {
     })
 
     const makeTransform = task => {
+
       const listOps = {
         add: (list, pos, item) => [...list.slice(0, pos), item, ...list.slice(pos, list.length)], 
         remove: (list, pos) => [...list.slice(0, pos), ...list.slice(pos+1, list.length)],
-        change: (list, pos, props) => [...list.slice(0, pos), {...props, ...list[pos]}, ...list.slice(pos+1, list.length)]
+        change: (list, pos, fun) => [...list.slice(0, pos), fun(list[pos]), ...list.slice(pos+1, list.length)]
       }
+
+      const mergeState = props => obj => ({...obj, state:{...obj.state, ...props}})
+
       const transform = {
         add: list => listOps['add'](list, task.position[task.position.length-1], task.item),
-        change: list => listOps['change'](list, task.position[task.position.length-1], task.state)
+        change: list => listOps['change'](list, task.position[task.position.length-1], mergeState(task.state))
       }
-      return transform[task.name]
+
+      return transform[task.action]
     }
 
     const lens = makeLens(task.position, this.state.componentTree)
 
     const newTree = lens.set(makeTransform(task)(lens.get()))    
-
+    console.log(newTree)
     this.setState({componentTree: newTree})
   }
 
@@ -76,18 +87,22 @@ class Editor extends React.Component {
       className="editor branch">
       {this.state.componentTree.map((item, id) =>
         wrapEdited(item, [id], {
-          onAddComponent: (position, selectedIndex) => this.changeState({
-            task:'add',
+          onAddComponent: (position, selectedIndex) => {
+            console.log(position, selectedIndex)
+            return this.changeState({
+            action:'add',
             position,
-            item:availableComponents[selectedIndex].component
-          }), //ind: [parent pos, child pos]
+            item: availableComponents[selectedIndex]
+          })}, //ind: [parent pos, child pos]
           components: availableComponents
         })({
           onChangeState: (position, state) => this.changeState({
-            task: 'change',
+            action: 'change',
             position,
-            state
-          })}))}
+            state: state
+          }),
+          state: item.state
+        }))}
     </div>)
   }
 }

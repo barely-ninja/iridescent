@@ -9,7 +9,7 @@ const wrapEdited = (target, id, commonProps) => {
         target.children.map((item, cid) => {
           const childId = id.slice()
           childId.push(cid)
-          return wrapEdited(item, childId, commonProps)
+          return wrapEdited(item, childId, commonProps)(props)
         }) : 
         React.createElement(target.component, {...props, position: id})}
       <div
@@ -19,12 +19,14 @@ const wrapEdited = (target, id, commonProps) => {
           Add:
           <div
             className="add-components">
-            <select name="components">
+            <select 
+              name="components"
+              onChange={(ev)=>commonProps.onAddComponent(id, parseInt(ev.target.value))}
+              value={0}>
               {commonProps.components.map((item, ind) => (
                 <option 
                   key={ind}
-                  value={ind} 
-                  onSelect={()=>commonProps.onAddComponent(id, ind)}>
+                  value={ind}>
                   {item.name}
                 </option>
               ))}
