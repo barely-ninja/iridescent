@@ -5,24 +5,33 @@ import Table from 'src/table/Table.jsx'
 import Text from 'src/text/Text.jsx'
 import Editor from 'src/editor/Editor.jsx'
 
-const Content = () => ( 
+const buildTree = component => {
+  const componentNames = {
+    Text: Text,
+    Extra: Extra,
+    Picture: Picture,
+    Table: Table 
+  }
+
+  return (component.children.length == 0) ?
+    React.createElement(componentNames[component.name], component.props, null) : 
+    React.createElement(componentNames[component.name], component.props, ...component.children.map(buildTree))
+}
+
+const Content = (props) => ( 
   <div
     className="content branch">
     <Extra text="Add new post...">
-      <Editor/>
+      {props.loggedIn && <Editor/>}
     </Extra>
-    <div className="post branch">
-      <Text>Hello world, this is result of SSR:</Text>
-      <Picture src="https://dummyimage.com/300x200/000000/cc33dd.png&text=Hiiii">some pic</Picture>
-      <Extra text="from data...">
-        <Text>from data shown in table:</Text>
-        <Table src="http://samplecsvs.s3.amazonaws.com/SalesJan2009.csv">some table</Table>
-      </Extra>
-      <Extra text="Reply...">
-        <Editor/>
-      </Extra>
-    </div>
-
+    {props.posts.map(post => 
+      <div className="post branch">
+        {post.components.map(buildTree)}
+        <Extra text="Reply...">
+          {props.loggedIn && <Editor/>}
+        </Extra>
+      </div>
+    )}
   </div>
 )
 

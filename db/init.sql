@@ -8,7 +8,6 @@ CREATE TABLE IF NOT EXISTS users (
 
 CREATE TABLE IF NOT EXISTS posts (
   id SERIAL PRIMARY KEY,
-  content VARCHAR NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
   author INTEGER REFERENCES users NOT NULL
@@ -36,3 +35,17 @@ CREATE TABLE IF NOT EXISTS tag_groups_users (
   user_id INTEGER REFERENCES users ON DELETE CASCADE,
   PRIMARY KEY (tag_group_id, user_id)
 );
+
+CREATE TABLE IF NOT EXISTS components_schemas (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR UNIQUE NOT NULL,
+  schema JSONB NOT NULL
+)
+
+CREATE TABLE IF NOT EXISTS components (
+  id SERIAL PRIMARY KEY,
+  parent_id REFERENCES components ON DELETE CASCADE,
+  post_id REFERENCES posts ON DELETE CASCADE,
+  schema_id REFERENCES components_schemas,
+  props JSONB NOT NULL
+)
